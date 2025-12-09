@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<div class="swiper-container" id="top">
+
+    <div class="swiper-wrapper">
+        <div class="swiper-slide">
+            <div class="slide-inner" style="background-image:url(/static/images/slide-01.jpg)">
+                <div class=" mt-5 p-5 text-light w-50 m-auto">
+
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <h2 class="text-light">Register</h2>
+
+                                <form method="POST">
+                                    {% csrf_token %}
+
+                                    <label>Username</label><br>
+                                    <input type="text" name="username" required><br>
+
+                                    <label>Email</label><br>
+                                    <input type="email" name="email" required><br>
+
+                                    <label>Message</label><br>
+                                    <input type="message" name="message" required><br>
+
+                                    <label>Password</label><br>
+                                    <input type="password" name="password" required><br><br>
+
+                                    <button type="submit">Register</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+{% endblock %}

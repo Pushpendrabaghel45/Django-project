@@ -21,8 +21,11 @@ from myproject import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home),
+    path('home/', views.home),           #  ADD THIS
     path('about_us/', views.about_us),
     path('our_services/', views.our_services),
     path('contact_us/', views.contact_us),
-    
+    path('userform/', views.userform),
+    path('dashboard/', views.dashboard),
+    path('register/', views.register),
 ]
