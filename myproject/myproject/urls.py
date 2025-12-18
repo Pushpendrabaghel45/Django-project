@@ -1,40 +1,22 @@
-"""
-URL configuration for myproject project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.2/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
 from myproject import views
-from django.conf import settings
-from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.home),
-    path('home/', views.home),           #  ADD THIS
-    path('about_us/', views.about_us),
-    path('our_services/', views.our_services),
-    path('contact_us/', views.contact_us),
-    path('userform/', views.userform),
-    path('dashboard/', views.dashboard),
-    path('register/', views.register),
 
+    path('', views.home, name='home'),
 
-  # IMPORTANT: include accounts app URLs
-    path('', include('accounts.urls')),
+    path('signup/', views.signup, name='signup'),
+    path('login/', views.user_login, name='login'),
+    path('logout/', views.user_logout, name='logout'),
+
+    path('index/', views.index, name='index'),
+    path('dashboard/', views.dashboard, name='dashboard'),
+    path('about_us/', views.about_us, name='about_us'),
+    path('our_services/', views.our_services, name='our_services'),
+    path('testimonials/', views.testimonials, name='testimonials'),
+    path('contact_us/', views.contact_us, name='contact_us'),
+    path('register/', views.register, name='register'),
+    path('userform/', views.userform, name='userform'),
 ]
-
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

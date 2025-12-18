@@ -103,6 +103,9 @@ def is_admin(user):
     return user.groups.filter(name='AdminGroup').exists()
 
 
+
 @user_passes_test(is_admin)
 def admin_dashboard(request):
-    return render(request, 'accounts/admin_dashboard.html')
+    return redirect('profile')
+    # return render(request, 'accounts/admin_dashboard.html')
+

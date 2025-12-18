@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="testimonials" id="testimonials">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-6 offset-lg-3">
+        <div class="section-heading">
+          <h6>Testimonials</h6>
+          <h4>What They Say</h4>
+          <div class="col">
+            <h2>Username : {{ n1 }}</h2>
+            <h2>email : {{ n2 }}</h2>
+            <h2>Message : {{ n3 }}</h2>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-10 offset-lg-1">
+        <div class="owl-testimonials owl-carousel" style="position: relative; z-index: 5;">
+          <div class="item">
+            <i class="fa fa-quote-left"></i>
+            <p>“Donec et nunc massa. Nullam non felis dignissim, dapibus turpis semper, vulputate lorem. Nam volutpat
+              posuere tellus, in porttitor justo interdum nec. Aenean in dapibus risus, in euismod ligula. Aliquam vel
+              scelerisque elit.”</p>
+            <h4>David Eigenberg</h4>
+            <span>CEO of Mexant</span>
+            <div class="right-image">
+              <img src="/static/images/testimonials-01.jpg" alt="">
+            </div>
+          </div>
+          <div class="item">
+            <i class="fa fa-quote-left"></i>
+            <p>“Etiam id ligula risus. Fusce fringilla nisl nunc, nec rutrum lectus cursus nec. In blandit nibh dolor,
+              at rutrum leo accumsan porta. Nullam pulvinar eros porttitor risus condimentum tempus.”</p>
+            <h4>Andrew Garfield</h4>
+            <span>CTO of Mexant</span>
+            <div class="right-image">
+              <img src="/static/images/testimonials-01.jpg" alt="">
+            </div>
+          </div>
+          <div class="item">
+            <i class="fa fa-quote-left"></i>
+            <p>“Ut dictum vehicula massa, ac pharetra leo tincidunt eu. Phasellus in tristique magna, ac gravida leo.
+              Integer sed lorem sapien. Ut viverra mauris sed lobortis commodo.”</p>
+            <h4>George Lopez</h4>
+            <span>Crypto Manager</span>
+            <div class="right-image">
+              <img src="/static/images/testimonials-01.jpg" alt="">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="partners">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-2 col-sm-4 col-6">
+        <div class="item">
+          <img src="/static/images/client-01.png" alt="">
+        </div>
+      </div>
+      <div class="col-lg-2 col-sm-4 col-6">
+        <div class="item">
+          <img src="/static/images/client-01.png" alt="">
+        </div>
+      </div>
+      <div class="col-lg-2 col-sm-4 col-6">
+        <div class="item">
+          <img src="/static/images/client-01.png" alt="">
+        </div>
+      </div>
+      <div class="col-lg-2 col-sm-4 col-6">
+        <div class="item">
+          <img src="/static/images/client-01.png" alt="">
+        </div>
+      </div>
+      <div class="col-lg-2 col-sm-4 col-6">
+        <div class="item">
+          <img src="/static/images/client-01.png" alt="">
+        </div>
+      </div>
+      <div class="col-lg-2 col-sm-4 col-6">
+        <div class="item">
+          <img src="/static/images/client-01.png" alt="">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Scripts -->
+<!-- Bootstrap core JavaScript -->
+<script src="/static/endor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<script src="/static/js/isotope.min.js"></script>
+<script src="/static/js/owl-carousel.js"></script>
+
+<script src="/static/js/tabs.js"></script>
+<script src="/static/js/swiper.js"></script>
+<script src="/static/js/custom.js"></script>
+<script>
+  var interleaveOffset = 0.5;
+
+  var swiperOptions = {
+    loop: true,
+    speed: 1000,
+    grabCursor: true,
+    watchSlidesProgress: true,
+    mousewheelControl: true,
+    keyboardControl: true,
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev"
+    },
+    on: {
+      progress: function () {
+        var swiper = this;
+        for (var i = 0; i < swiper.slides.length; i++) {
+          var slideProgress = swiper.slides[i].progress;
+          var innerOffset = swiper.width * interleaveOffset;
+          var innerTranslate = slideProgress * innerOffset;
+          swiper.slides[i].querySelector(".slide-inner").style.transform =
+            "translate3d(" + innerTranslate + "px, 0, 0)";
+        }
+      },
+      touchStart: function () {
+        var swiper = this;
+        for (var i = 0; i < swiper.slides.length; i++) {
+          swiper.slides[i].style.transition = "";
+        }
+      },
+      setTransition: function (speed) {
+        var swiper = this;
+        for (var i = 0; i < swiper.slides.length; i++) {
+          swiper.slides[i].style.transition = speed + "ms";
+          swiper.slides[i].querySelector(".slide-inner").style.transition =
+            speed + "ms";
+        }
+      }
+    }
+  };
+
+  var swiper = new Swiper(".swiper-container", swiperOptions);
+</script>
+</body>
+</main>
+{% endblock %}
