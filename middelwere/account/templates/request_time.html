@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Request Time{% endblock %}
+
+{% block content %}
+<h2>⏱ Request Time Middleware</h2>
+
+<p>Is page ko refresh karo aur terminal dekho.</p>
+<p>Console me message aayega:</p>
+
+<pre>
+Request took 0.0xxxx seconds
+</pre>
+
+<p>Ye middleware har request ka execution time measure karta hai.</p>
+{% endblock %}
