@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin | Categories</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/assets/CSS/style.css">
+</head>
+
+<body>
+
+<div class="container-fluid">
+  <div class="row">
+
+    <!-- SIDEBAR -->
+    <div class="col-md-2 bg-dark min-vh-100 text-white p-3">
+      <h4 class="text-center mb-4">Admin Panel</h4>
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a class="nav-link text-white" href="{% url 'admin_dashboard' %}">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" href="{% url 'admin_products' %}">Products</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white active" href="{% url 'admin_categories' %}">Categories</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" href="{% url 'admin_logout' %}">Logout</a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="col-md-10 p-4">
+
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Categories</h2>
+        <a href="{% url 'admin_category_add' %}" class="btn btn-primary">
+          + Add Category
+        </a>
+      </div>
+
+      <!-- CATEGORY TABLE -->
+      <div class="card">
+        <div class="card-body">
+          <table class="table table-bordered table-hover">
+            <thead class="thead-dark">
+              <tr>
+                <th>#</th>
+                <th>Category Name</th>
+                <th>Created At</th>
+                <th width="180">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              {% for category in categories %}
+              <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ category.name }}</td>
+                <td>{{ category.created_at|date:"d M Y" }}</td>
+                <td>
+                  <a href="{% url 'admin_category_edit' category.id %}" class="btn btn-sm btn-warning">
+                    Edit
+                  </a>
+                  <a href="{% url 'admin_category_delete' category.id %}"
+                     class="btn btn-sm btn-danger"
+                     onclick="return confirm('Are you sure?')">
+                    Delete
+                  </a>
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="4" class="text-center">No Categories Found</td>
+              </tr>
+              {% endfor %}
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
