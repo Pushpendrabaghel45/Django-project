@@ -14,8 +14,10 @@ def admin_personal_details(request):
     return render(request, 'admin/personaldetails.html')
 
 def admin_logout(request):
-    return render(request, 'admin/logout.html' )
-
+    print("chala inside route se")
+    request.session['user_logged_in'] = False
+    request.session.flush()  # clear session
+    return redirect('admin_login')
 
 def admin_dashboard(request):
     total_products = Product.objects.count()

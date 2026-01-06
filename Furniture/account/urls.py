@@ -11,7 +11,7 @@ from account import views
 urlpatterns = [
     path('dashboard/', admin_dashboard, name='admin_dashboard'), 
     path('dashboard/products/', views.admin_products, name='admin_products'),
-    path('dashboard/logout/', views.admin_logout, name='admin_logout'),
+    path('dashboard/logout/', views.admin_logout, name='logout'),
 
     path('product/add/', views.add_product, name='add_product'),
     path('product/edit/<int:id>/', views.edit_product, name='edit_product'),
