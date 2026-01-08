@@ -1,5 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from account.models import Product, Category
+from django.core.cache import cache
+
+
 
 # def admin_dashboard(request):
 #     products = Product.objects.all()
@@ -31,7 +34,10 @@ def admin_dashboard(request):
 #     return render(request, 'admin/products.html', {'products': products})
 
 def admin_products(request):
-    products = Product.objects.all()
+    products = cache.get('all_products')
+    if not products:
+        products = Product.objects.all()
+        cache.set('all_products', products, timeout=300)
     return render(request, 'admin/products.html', {
         'products': products
     })
