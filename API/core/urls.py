@@ -1,13 +1,16 @@
 from django.urls import path
-from .views import AdminLoginAPI, AdminDashboardAPI, AdminCreateEmployeeAPI, AdminViewEmployeeAPI
+from .views import AdminLoginAPI, AdminDashboardAPI, EmployeeProfileAPI, EmployeeDetailAPI
 
 
 urlpatterns = [
     path('admin/login/', AdminLoginAPI.as_view(), name='admin_login'),
     path('admin/dashboard/', AdminDashboardAPI.as_view(), name='admin_dashboard'),
-    path('admin/create-employee/', AdminCreateEmployeeAPI.as_view(), name='admin_createemp'),
-    path('admin/employees/', AdminViewEmployeeAPI.as_view(), name='admin_viewempdetails'),
+    path('admin/create-employee/', EmployeeProfileAPI.as_view(), name='admin_createemp'),
+    path('admin/employees/', EmployeeDetailAPI.as_view(), name='admin_viewempdetails'),
 ]
+
+
+
 
 
 
