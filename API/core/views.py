@@ -63,8 +63,8 @@ class AdminDashboardAPI(APIView):
 
     def get(self, request):
         return Response({
-            "message": "Welcome Admin",
-            "user": request.user.username
+            "message": "Employee list access granted",
+            "admin": request.user.username
         })
 
 # class AdminDashboardAPI(APIView):
