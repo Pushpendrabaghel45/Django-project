@@ -6,6 +6,11 @@ from core.models import Employee
 from .serializers import LoginSerializer, EmployeeSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
+from django.contrib.auth.models import User
+
+
+
+
 
 
 # Admin Login API .........
@@ -31,28 +36,6 @@ class AdminLoginAPI(APIView):
         return Response({"error": "Invalid credentials"}, status=401)
 
 
-# class AdminLoginAPI(APIView):
-#     permission_classes = [permissions.AllowAny]
-
-#     def post(self, request):
-#         serializer = LoginSerializer(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-
-#         user = authenticate(
-#             username=serializer.validated_data['username'],
-#             password=serializer.validated_data['password']
-#         )
-
-#         if user and user.is_staff:
-#             login(request, user)
-#             return Response({
-#                 "message": "Admin login successful",
-#                 "username": user.username
-#             })
-#         return Response(
-#             {"error": "Invalid credentials"},
-#             status=status.HTTP_401_UNAUTHORIZED
-#         )
 
 
 
@@ -67,68 +50,50 @@ class AdminDashboardAPI(APIView):
             "admin": request.user.username
         })
 
-# class AdminDashboardAPI(APIView):
-#     permission_classes = [IsAdminUser]
 
-#     def get(self, request):
-#         return Response({
-#             "username": request.user.username,
-#             "role": "Admin",
-#             "total_employees": 25
-#         })
 
 # Create Employee API .........
-class EmployeeProfileAPI(APIView):
-    permission_classes = [IsAuthenticated]
 
-    def get(self, request):
-        user = request.user
-        employee = user.employee  # OneToOne relation
+class CreateEmployeeAPI(APIView):
 
-        return Response({
-            "first_name": user.first_name,
-            "last_name": user.last_name,
-            "email": user.email,
-            "phone": employee.phone,
-            "department": employee.department,
-            "designation": employee.designation,
-            "address": employee.address,
-        })
+    def post(self, request):
+        email = request.data.get("email")
 
-    def put(self, request):
-        user = request.user
-        employee = user.employee
+        # ✅ Check if user already exists
+        if User.objects.filter(username=email).exists():
+            return Response(
+                {"error": "Employee with this email already exists"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
-        user.first_name = request.data.get("first_name")
-        user.last_name = request.data.get("last_name")
-        user.email = request.data.get("email")
-        user.save()
+        user = User.objects.create_user(
+            username=email,
+            email=email,          
+            first_name=request.data.get("first_name"),
+            last_name=request.data.get("last_name")
+        )
 
-        employee.phone = request.data.get("phone")
-        employee.address = request.data.get("address")
-        employee.save()
+        # create employee profile here
+        Employee.objects.create(
+            user=user,
+            phone=request.data.get("phone"),
+            department=request.data.get("department"),
+            designation=request.data.get("designation"),
+            address=request.data.get("address"),
+        )
 
-        return Response({"message": "Profile updated"})
-    
-
-
+        return Response(
+            {"message": "Employee created successfully"},
+            status=status.HTTP_201_CREATED
+        )
 
 #  View Employee Details API ...........
 
-class EmployeeDetailAPI(APIView):
-    permission_classes = [IsAuthenticated]
+class EmployeeListAPI(APIView):
+    permission_classes = [IsAdminUser]
 
     def get(self, request):
-        emp = request.user.employee
-
-        return Response({
-            "name": f"{request.user.first_name} {request.user.last_name}",
-            "designation": emp.designation,
-            "emp_id": emp.emp_id,
-            "email": request.user.email,
-            "phone": emp.phone,
-            "department": emp.department,
-            "joining_date": emp.joining_date,
-            "status": emp.status,
-        })
+        employees = Employee.objects.all()
+        serializer = EmployeeSerializer(employees, many=True)
+        return Response(serializer.data)
 
