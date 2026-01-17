@@ -7,6 +7,7 @@ from .serializers import LoginSerializer, EmployeeSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
 from django.contrib.auth.models import User
+from rest_framework.viewsets import ModelViewSet
 
 
 
@@ -55,27 +56,21 @@ class AdminDashboardAPI(APIView):
 # Create Employee API .........
 
 class CreateEmployeeAPI(APIView):
+    permission_classes = [IsAdminUser]
 
     def post(self, request):
         email = request.data.get("email")
 
-        # ✅ Check if user already exists
-        if User.objects.filter(username=email).exists():
+        if Employee.objects.filter(email=email).exists():
             return Response(
                 {"error": "Employee with this email already exists"},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        user = User.objects.create_user(
-            username=email,
-            email=email,          
+        employee = Employee.objects.create(
             first_name=request.data.get("first_name"),
-            last_name=request.data.get("last_name")
-        )
-
-        # create employee profile here
-        Employee.objects.create(
-            user=user,
+            last_name=request.data.get("last_name"),
+            email=email,
             phone=request.data.get("phone"),
             department=request.data.get("department"),
             designation=request.data.get("designation"),
@@ -86,7 +81,6 @@ class CreateEmployeeAPI(APIView):
             {"message": "Employee created successfully"},
             status=status.HTTP_201_CREATED
         )
-
 #  View Employee Details API ...........
 
 class EmployeeListAPI(APIView):
@@ -97,3 +91,39 @@ class EmployeeListAPI(APIView):
         serializer = EmployeeSerializer(employees, many=True)
         return Response(serializer.data)
 
+
+
+#Edit/Update Employee
+
+
+class EmployeeDetailAPI(APIView):
+    permission_classes = [IsAdminUser]
+
+    def get(self, request, pk):
+        employee = Employee.objects.get(pk=pk)
+        serializer = EmployeeSerializer(employee)
+        return Response(serializer.data)
+
+    def put(self, request, pk):
+        employee = self.get_object(pk)
+        if not employee:
+            return Response({"error": "Not found"}, status=404)
+
+        serializer = EmployeeSerializer(employee, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "Employee updated"})
+        return Response(serializer.errors, status=400)
+
+    def delete(self, request, pk):
+        employee = self.get_object(pk)
+        if not employee:
+            return Response({"error": "Not found"}, status=404)
+
+        employee.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+class EmployeeViewSet(ModelViewSet):
+    queryset = Employee.objects.all()
+    serializer_class = EmployeeSerializer
+    permission_classes = [IsAuthenticated]

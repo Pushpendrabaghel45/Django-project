@@ -12,11 +12,11 @@ class Employee(models.Model):
 
     address = models.TextField(blank=True)
 
-    profile_photo = models.ImageField(
-        upload_to='employees/profile_photos/',
-        blank=True,
-        null=True
-    )
+    # profile_photo = models.ImageField(
+    #     upload_to='employees/profile_photos/',
+    #     blank=True,
+    #     null=True
+    
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
