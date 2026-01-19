@@ -83,6 +83,43 @@ class CreateEmployeeAPI(APIView):
         )
 #  View Employee Details API ...........
 
+class EmployeeDetailAPI(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self, pk):
+        try:
+            return Employee.objects.get(pk=pk)
+        except Employee.DoesNotExist:
+            return None
+
+    def get(self, request, pk):
+        employee = self.get_object(pk)
+        if not employee:
+            return Response({"error": "Not found"}, status=404)
+
+        serializer = EmployeeSerializer(employee)
+        return Response(serializer.data)
+
+    def put(self, request, pk):
+        employee = self.get_object(pk)
+        if not employee:
+            return Response({"error": "Not found"}, status=404)
+
+        serializer = EmployeeSerializer(employee, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({"message": "Employee updated successfully"})
+
+    def delete(self, request, pk):
+        employee = self.get_object(pk)
+        if not employee:
+            return Response({"error": "Not found"}, status=404)
+
+        employee.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+
 class EmployeeListAPI(APIView):
     permission_classes = [IsAdminUser]
 
@@ -93,36 +130,39 @@ class EmployeeListAPI(APIView):
 
 
 
-#Edit/Update Employee
+# #Edit/Update Employee
 
 
-class EmployeeDetailAPI(APIView):
-    permission_classes = [IsAdminUser]
+# class EmployeeDetailAPI(APIView):
+#     permission_classes = [IsAdminUser]
 
-    def get(self, request, pk):
-        employee = Employee.objects.get(pk=pk)
-        serializer = EmployeeSerializer(employee)
-        return Response(serializer.data)
+#     def get(self, request, pk):
+#         employee = Employee.objects.get(pk=pk)
+#         serializer = EmployeeSerializer(employee)
+#         return Response(serializer.data)
 
-    def put(self, request, pk):
-        employee = self.get_object(pk)
-        if not employee:
-            return Response({"error": "Not found"}, status=404)
+#     def put(self, request, pk):
+#         employee = self.get_object(pk)
+#         if not employee:
+#             return Response({"error": "Not found"}, status=404)
 
-        serializer = EmployeeSerializer(employee, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({"message": "Employee updated"})
-        return Response(serializer.errors, status=400)
+#         serializer = EmployeeSerializer(employee, data=request.data, partial=True)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response({"message": "Employee updated"})
+#         return Response(serializer.errors, status=400)
 
-    def delete(self, request, pk):
-        employee = self.get_object(pk)
-        if not employee:
-            return Response({"error": "Not found"}, status=404)
+#     def delete(self, request, pk):
+#         employee = self.get_object(pk)
+#         if not employee:
+#             return Response({"error": "Not found"}, status=404)
 
-        employee.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+#         employee.delete()
+#         return Response(status=status.HTTP_204_NO_CONTENT)
     
+
+#single employee views#
+
 class EmployeeViewSet(ModelViewSet):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer

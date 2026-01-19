@@ -7,7 +7,7 @@ urlpatterns = [
     path('admin/dashboard/', AdminDashboardAPI.as_view()),
     path('admin/create-employee/', CreateEmployeeAPI.as_view()),
     path('admin/employees/', EmployeeListAPI.as_view()),
-    path('admin/employees/<int:pk>/', EmployeeDetailAPI.as_view()),  # ✅ FIX
+    path('admin/employees/<int:pk>/', EmployeeDetailAPI.as_view()),  
 ]
 
 
